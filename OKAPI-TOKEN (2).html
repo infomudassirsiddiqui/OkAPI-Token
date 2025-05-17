@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$OKAPI ***** - Farming Adventure</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 20c-10 0-18 8-18 18s8 18 18 18 18-8 18-18-8-18-18-18zm0 30c-6.6 0-12-5.4-12-12s5.4-12 12-12 12 5.4 12 12-5.4 12-12 12z' fill='%232a9d8f'/><path d='M50 60v20h10V60H50z' fill='%232a9d8f'/></svg>" type="image/svg+xml"><!-- Wheat favicon -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2a9d8f;
+            /* Forest Green */
+            --secondary: #e9c46a;
+            /* Harvest Gold */
+            --accent: #8b5e3c;
+            /* Earthy Brown */
+            --text: #ffffff;
+            --bg-dark: rgba(20, 33, 61, 0.95);
+            /* Deep Soil */
+            --bronze: #cd7f32;
+            --silver: #d1d5db;
+            --gold: #f0c05a;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --gradient: linear-gradient(135deg, #2a9d8f, #8b5e3c);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: url('https://images.unsplash.com/photo-1500595046743-ee65ed22d3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center/cover;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 40px auto;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header img.logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .stats p {
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .stats i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .stats span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        #farm-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            padding: 20px;
+            background: var(--gradient);
+            color: var(--text);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin: 30px auto;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        #farm-button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        #farm-button:active {
+            transform: translateY(0);
+        }
+
+        #farm-button:disabled {
+            background: #4b5563;
+            cursor: not-allowed;
+        }
+
+        #timer-display {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            color: var(--secondary);
+        }
+
+        .tab-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .tab-menu button {
+            flex: 1;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-menu button:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .tab-menu button.active {
+            background: var(--secondary);
+            color: #000;
+            border-color: var(--secondary);
+        }
+
+        .tab-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-content h2 {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .task,
+        .upgrade,
+        .achievement,
+        .daily-bonus,
+        .referral,
+        .reset-data {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .task button,
+        .upgrade button,
+        .achievement button,
+        .daily-bonus button,
+        .referral button,
+        .reset-button {
+            background: var(--gradient);
+            color: var(--text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .task button:hover,
+        .upgrade button:hover,
+        .achievement button:hover,
+        .daily-bonus button:hover,
+        .referral button:hover,
+        .reset-button:hover {
+            background: var(--secondary);
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        .achievement.bronze {
+            border-left: 5px solid var(--bronze);
+        }
+
+        .achievement.silver {
+            border-left: 5px solid var(--silver);
+        }
+
+        .achievement.gold {
+            border-left: 5px solid var(--gold);
+        }
+
+        .leaderboard-list {
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: var(--text);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 5px 15px var(--shadow);
+            display: none;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        footer .copyright {
+            margin-bottom: 10px;
+        }
+
+        footer .rights-reserved {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        footer .links a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 0.85rem;
+        }
+
+        footer .links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            #farm-button {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+
+            .tab-menu button {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
+    </style>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+    <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+    <script>
+        // Initialize state
+        let points = parseInt(localStorage.getItem('points')) || 0;
+        let farmingStart = parseInt(localStorage.getItem('farmingStart')) || 0;
+        let isFarming = localStorage.getItem('isFarming') === 'true';
+        let tapMultiplier = parseInt(localStorage.getItem('tapMultiplier')) || 1;
+        let autoHarvester = localStorage.getItem('autoHarvester') === 'true';
+        let autoHarvesterPurchased = localStorage.getItem('autoHarvesterPurchased') === 'true';
+        let turboTractorPurchased = localStorage.getItem('turboTractorPurchased') === 'true';
+        let task1Progress = parseInt(localStorage.getItem('task1Progress')) || 0;
+        let task1Completed = localStorage.getItem('task1Completed') === 'true';
+        let task2Progress = parseInt(localStorage.getItem('task2Progress')) || 0;
+        let task2Completed = localStorage.getItem('task2Completed') === 'true';
+        let task3Completed = localStorage.getItem('task3Completed') === 'true';
+        let level = parseInt(localStorage.getItem('level')) || 1;
+        let totalFarms = parseInt(localStorage.getItem('totalFarms')) || 0;
+        let upgradesBought = parseInt(localStorage.getItem('upgradesBought')) || 0;
+        let achievements = JSON.parse(localStorage.getItem('achievements')) || { ach1: false, ach2: false, ach3: false };
+        let walletAddress = localStorage.getItem('walletAddress') || null;
+        let lastDailyBonus = parseInt(localStorage.getItem('lastDailyBonus')) || 0;
+        let referralCode = localStorage.getItem('referralCode') || null;
+        let referralCount = parseInt(localStorage.getItem('referralCount')) || 0;
+        
+        // DOM elements
+        const farmButton = document.getElementById('farm-button');
+        const pointsDisplay = document.getElementById('points');
+        const levelDisplay = document.getElementById('level');
+        const levelProgressDisplay = document.getElementById('level-progress');
+        const timerDisplay = document.getElementById('timer-display');
+        const task1ProgressDisplay = document.getElementById('task1-progress');
+        const task1ClaimButton = document.getElementById('task1-claim');
+        const task2ProgressDisplay = document.getElementById('task2-progress');
+        const task2ClaimButton = document.getElementById('task2-claim');
+        const task3CompleteButton = document.getElementById('task3-complete');
+        const notification = document.getElementById('notification');
+        const walletAddressDisplay = document.getElementById('wallet-address');
+        const walletPublicKey = document.getElementById('wallet-public-key');
+        const connectWalletButton = document.getElementById('connect-wallet');
+        const disconnectWalletButton = document.getElementById('disconnect-wallet');
+        const dailyBonusButton = document.getElementById('daily-bonus-claim');
+        const referralCodeDisplay = document.getElementById('referral-code');
+        const shareReferralButton = document.getElementById('share-referral');
+        const playerRankDisplay = document.getElementById('player-rank');
+        const playerLeagueDisplay = document.getElementById('player-league');
+        const upgrade1BuyButton = document.getElementById('upgrade1-buy');
+        const upgrade2BuyButton = document.getElementById('upgrade2-buy');
+        
+        // Mock leaderboard data
+        let leaderboardData = JSON.parse(localStorage.getItem('leaderboardData')) || [
+            { name: "FarmerJoe", points: 150000 },
+            { name: "GreenThumb", points: 120000 },
+            { name: "CropKing", points: 100000 },
+            { name: "FieldStar", points: 80000 },
+            { name: "HarvestPro", points: 60000 }
+        ];
+        
+        // Leagues
+        const leagues = [
+            { name: "Rookie", minPoints: 0 },
+            { name: "Bronze", minPoints: 5000 },
+            { name: "Silver", minPoints: 20000 },
+            { name: "Gold", minPoints: 50000 },
+            { name: "Diamond", minPoints: 100000 }
+        ];
+        
+        // Level requirements
+        function getPointsForLevel(lvl) {
+            return 50 * lvl * lvl;
+        }
+        
+        // Get player’s league
+        function getPlayerLeague(points) {
+            return leagues.reduce((prev, curr) => points >= curr.minPoints ? curr.name : prev, leagues[0].name);
+        }
+        
+        // Update leaderboard
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            leaderboardList.innerHTML = '';
+            const playerEntry = { 
+                name: walletAddress ? `You (${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)})` : 'You', 
+                points 
+            };
+            leaderboardData = leaderboardData.filter(entry => entry.name !== playerEntry.name);
+            leaderboardData.push(playerEntry);
+            leaderboardData.sort((a, b) => b.points - a.points);
+            localStorage.setItem('leaderboardData', JSON.stringify(leaderboardData));
+        
+            const playerRank = leaderboardData.findIndex(entry => entry.**** === playerEntry.name) + 1;
+            playerRankDisplay.textContent = playerRank <= 10 ? `#${playerRank}` : 'N/A';
+            playerLeagueDisplay.textContent = getPlayerLeague(points);
+        
+            leaderboardData.slice(0, 10).forEach((entry, index) => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = `leaderboard-entry ${entry.name === playerEntry.name ? 'current-player' : ''}`;
+                entryDiv.innerHTML = `
+                    <span class="rank">#${index + 1}</span>
+                    <span class="player">${entry.name}</span>
+                    <span class="points">${entry.points.toLocaleString()} tokens</span>
+                `;
+                leaderboardList.appendChild(entryDiv);
+            });
+        }
+        
+        // Format time
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+        
+        // Farming logic
+        const FARM_DURATION = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+        const BASE_REWARD = 3000; // Base tokens per harvest
+        
+        function startFarming() {
+            if (!isFarming) {
+                isFarming = true;
+                farmingStart = Date.now();
+                totalFarms++;
+                task1Progress = Math.min(task1Progress + 1, 50);
+                task2Progress = Math.min(task2Progress + 1, 100);
+                localStorage.setItem('isFarming', isFarming);
+                localStorage.setItem('farmingStart', farmingStart);
+                localStorage.setItem('totalFarms', totalFarms);
+                localStorage.setItem('task1Progress', task1Progress);
+                localStorage.setItem('task2Progress', task2Progress);
+                updateUI();
+                showNotification('Farming started! Come back in 3 hours to collect rewards.');
+            } else {
+                showNotification('Farming already in progress!');
+            }
+        }
+        
+        function checkFarming() {
+            if (isFarming && farmingStart) {
+                const elapsed = Date.now() - farmingStart;
+                if (elapsed >= FARM_DURATION) {
+                    const reward = BASE_REWARD * tapMultiplier;
+                    points += reward;
+                    isFarming = false;
+                    farmingStart = 0;
+                    localStorage.setItem('points', points);
+                    localStorage.setItem('isFarming', isFarming);
+                    localStorage.setItem('farmingStart', farmingStart);
+                    updateUI();
+                    showNotification(`Harvest complete! +${reward} tokens`);
+                    if (autoHarvester) {
+                        setTimeout(startFarming, 1000); // Auto-restart farming
+                    }
+                }
+            }
+        }
+        
+        // Update timer display
+        function updateTimer() {
+            if (isFarming && farmingStart) {
+                const elapsed = Date.now() - farmingStart;
+                const remaining = Math.max(0, (FARM_DURATION - elapsed) / 1000);
+                timerDisplay.textContent = `Time until harvest: ${formatTime(remaining)}`;
+                farmButton.disabled = true;
+                farmButton.textContent = 'Farming...';
+            } else {
+                timerDisplay.textContent = 'Time until harvest: Not started';
+                farmButton.disabled = false;
+                farmButton.textContent = 'Start Farming';
+            }
+        }
+        
+        // Check farming status and update timer every second
+        setInterval(() => {
+            checkFarming();
+            updateTimer();
+        }, 1000);
+        
+        // Check for offline rewards
+        if (isFarming && farmingStart) {
+            const elapsed = Date.now() - farmingStart;
+            if (elapsed >= FARM_DURATION) {
+                const reward = BASE_REWARD * tapMultiplier;
+                points += reward;
+                isFarming = false;
+                farmingStart = 0;
+                localStorage.setItem('points', points);
+                localStorage.setItem('isFarming', isFarming);
+                localStorage.setItem('farmingStart', farmingStart);
+                showNotification(`Offline harvest complete! +${reward} tokens`);
+                if (autoHarvester) {
+                    startFarming();
+                }
+            }
+        }
+        
+        // Update UI
+        function updateUI() {
+            pointsDisplay.textContent = points.toLocaleString();
+            levelDisplay.textContent = level;
+            const nextLevelPoints = getPointsForLevel(level + 1);
+            levelProgressDisplay.textContent = `${points.toLocaleString()}/${nextLevelPoints.toLocaleString()}`;
+            task1ProgressDisplay.textContent = task1Progress;
+            task1ClaimButton.disabled = task1Progress < 50 || task1Completed;
+            task2ProgressDisplay.textContent = task2Progress;
+            task2ClaimButton.disabled = task2Progress < 100 || task2Completed;
+            task3CompleteButton.disabled = task3Completed;
+            document.getElementById('ach1-progress').textContent = totalFarms;
+            document.getElementById('ach2-progress').textContent = level;
+            document.getElementById('ach3-progress').textContent = upgradesBought;
+            document.getElementById('ach1-claim').disabled = totalFarms < 100 || achievements.ach1;
+            document.getElementById('ach2-claim').disabled = level < 5 || achievements.ach2;
+            document.getElementById('ach3-claim').disabled = upgradesBought < 1 || achievements.ach3;
+            referralCodeDisplay.textContent = referralCode ? `https://okapi.farm/ref/${referralCode}` : 'N/A';
+            shareReferralButton.style.display = referralCode ? 'inline-block' : 'none';
+        
+            upgrade1BuyButton.disabled = turboTractorPurchased || points < 500;
+            upgrade2BuyButton.disabled = autoHarvesterPurchased || points < 1000 || level < 30;
+        
+            if (walletAddress) {
+                walletAddressDisplay.style.display = 'block';
+                walletPublicKey.textContent = walletAddress;
+                connectWalletButton.style.display = 'none';
+                disconnectWalletButton.style.display = 'block';
+            } else {
+                walletAddressDisplay.style.display = 'none';
+                connectWalletButton.style.display = 'block';
+                disconnectWalletButton.style.display = 'none';
+            }
+        
+            dailyBonusButton.disabled = Date.now() - lastDailyBonus < 24 * 60 * 60 * 1000;
+        
+            while (points >= getPointsForLevel(level + 1)) {
+                level++;
+                points += 50;
+                showNotification(`Level Up! Reached Level ${level}! +50 tokens`);
+            }
+        
+            localStorage.setItem('points', points);
+            localStorage.setItem('tapMultiplier', tapMultiplier);
+            localStorage.setItem('autoHarvester', autoHarvester);
+            localStorage.setItem('autoHarvesterPurchased', autoHarvesterPurchased);
+            localStorage.setItem('turboTractorPurchased', turboTractorPurchased);
+            localStorage.setItem('task1Progress', task1Progress);
+            localStorage.setItem('task1Completed', task1Completed);
+            localStorage.setItem('task2Progress', task2Progress);
+            localStorage.setItem('task2Completed', task2Completed);
+            localStorage.setItem('task3Completed', task3Completed);
+            localStorage.setItem('level', level);
+            localStorage.setItem('totalFarms', totalFarms);
+            localStorage.setItem('upgradesBought', upgradesBought);
+            localStorage.setItem('achievements', JSON.stringify(achievements));
+            localStorage.setItem('walletAddress', walletAddress);
+            localStorage.setItem('lastDailyBonus', lastDailyBonus);
+            localStorage.setItem('referralCode', referralCode);
+            localStorage.setItem('referralCount', referralCount);
+        
+            updateLeaderboard();
+            updateTimer();
+        }
+        
+        // Start farming event
+        farmButton.addEventListener('click', startFarming);
+        
+        // Show notification
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.display = 'block';
+            notification.style.opacity = '1';
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.style.display = 'none', 300);
+            }, 3000);
+        }
+        
+        // Tab navigation
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+            const tabElement = document.getElementById(tabId);
+            if (tabElement) tabElement.style.display = 'block';
+            document.querySelectorAll('.tab-menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.tab-menu button[onclick="showTab('${tabId}')"]`)?.classList.add('active');
+        }
+        
+        // Tasks
+        task1ClaimButton.addEventListener('click', () => {
+            if (task1Progress >= 50 && !task1Completed) {
+                points += 100;
+                task1Completed = true;
+                updateUI();
+                showNotification('Task completed! +100 tokens');
+            }
+        });
+        
+        task2ClaimButton.addEventListener('click', () => {
+            if (task2Progress >= 100 && !task2Completed) {
+                points += 250;
+                task2Completed = true;
+                updateUI();
+                showNotification('Task completed! +250 tokens');
+            }
+        });
+        
+        function completeTask3() {
+            if (!task3Completed) {
+                window.open('https://x.com', '_blank');
+                points += 200;
+                task3Completed = true;
+                updateUI();
+                showNotification('Task completed! +200 tokens');
+            } else {
+                showNotification('Task already completed!');
+            }
+        }
+        
+        // Upgrades
+        function buyUpgrade(id) {
+            if (id === 1 && points >= 500 && !turboTractorPurchased) {
+                points -= 500;
+                tapMultiplier = 2;
+                turboTractorPurchased = true;
+                upgradesBought++;
+                updateUI();
+                showNotification('Turbo Tractor purchased! 2x tokens per harvest');
+            } else if (id === 2 && points >= 1000 && !autoHarvesterPurchased && level >= 30) {
+                points -= 1000;
+                autoHarvester = true;
+                autoHarvesterPurchased = true;
+                upgradesBought++;
+                if (!isFarming) startFarming(); // Start farming if not already
+                updateUI();
+                showNotification('Auto-Harvester purchased! Automatic farming every 3 hours');
+            } else {
+                showNotification(id === 2 && level < 30 ? 'Requires Level 30!' : 'Not enough tokens or already purchased!');
+            }
+        }
+        
+        // Achievements
+        document.getElementById('ach1-claim').addEventListener('click', () => {
+            if (totalFarms >= 100 && !achievements.ach1) {
+                points += 100;
+                achievements.ach1 = true;
+                updateUI();
+                showNotification('Achievement completed! +100 tokens');
+            }
+        });
+        
+        document.getElementById('ach2-claim').addEventListener('click', () => {
+            if (level >= 5 && !achievements.ach2) {
+                points += 200;
+                achievements.ach2 = true;
+                updateUI();
+                showNotification('Achievement completed! +200 tokens');
+            }
+        });
+        
+        document.getElementById('ach3-claim').addEventListener('click', () => {
+            if (upgradesBought >= 1 && !achievements.ach3) {
+                points += 150;
+                achievements.ach3 = true;
+                updateUI();
+                showNotification('Achievement completed! +150 tokens');
+            }
+        });
+        
+        // Wallet Integration
+        let provider;
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum !== 'undefined') {
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                } else {
+                    showNotification('Please replace YOUR_INFURA_ID with a valid Infura ID in the code or install MetaMask.');
+                    return;
+                }
+                const signer = provider.getSigner();
+                walletAddress = await signer.getAddress();
+                localStorage.setItem('walletAddress', walletAddress);
+                updateUI();
+                showNotification(`Wallet connected: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`);
+            } catch (error) {
+                showNotification(`Failed to connect wallet: ${error.message}`);
+            }
+        }
+        
+        function disconnectWallet() {
+            walletAddress = null;
+            provider = null;
+            localStorage.removeItem('walletAddress');
+            updateUI();
+            showNotification('Wallet disconnected.');
+        }
+        
+        // Daily Bonus
+        function claimDailyBonus() {
+            const now = Date.now();
+            if (now - lastDailyBonus >= 24 * 60 * 60 * 1000) {
+                points += 50;
+                lastDailyBonus = now;
+                updateUI();
+                showNotification('Daily bonus claimed! +50 tokens');
+            } else {
+                showNotification('Come back tomorrow for your next bonus!');
+            }
+        }
+        
+        // Referral System
+        function generateReferral() {
+            if (!walletAddress) {
+                showNotification('Connect your wallet to generate a referral link!');
+                return;
+            }
+            referralCode = `${walletAddress.slice(2, 10).toUpperCase()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+            localStorage.setItem('referralCode', referralCode);
+            updateUI();
+            showNotification(`Referral link generated: https://okapi.farm/ref/${referralCode}`);
+        }
+        
+        async function shareReferral() {
+            const shareData = {
+                title: 'Join OKAPI Token Farming!',
+                text: 'Grow your farm and earn $OKAPI tokens! Join now using my referral link!',
+                url: `https://okapi.farm/ref/${referralCode}`
+            };
+            try {
+                await navigator.share(shareData);
+                points += 10;
+                referralCount++;
+                if (referralCount % 5 === 0) points += 100;
+                updateUI();
+                showNotification('Referral link shared! +10 tokens');
+            } catch (error) {
+                showNotification('Failed to share referral link.');
+            }
+        }
+        
+        // Reset data
+        function resetData() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                background: var(--bg-dark); padding: 20px; border-radius: 10px;
+                box-shadow: 0 5px 15px var(--shadow); z-index: 2000; color: var(--text);
+            `;
+            modal.innerHTML = `
+                <h3>******* Reset</h3>
+                <p>Are you **** you **** to reset all farm data? This cannot be undone.</p>
+                <button onclick="confirmReset()" style="background: var(--gradient); padding: 10px 20px; border-radius: 8px;">Confirm</button>
+                <button onclick="this.parentElement.remove()" style="background: #4b5563; padding: 10px 20px; border-radius: 8px; margin-left: 10px;">Cancel</button>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        function confirmReset() {
+            localStorage.clear();
+            points = 0;
+            farmingStart = 0;
+            isFarming = false;
+            tapMultiplier = 1;
+            autoHarvester = false;
+            autoHarvesterPurchased = false;
+            turboTractorPurchased = false;
+            task1Progress = 0;
+            task1Completed = false;
+            task2Progress = 0;
+            task2Completed = false;
+            task3Completed = false;
+            level = 1;
+            totalFarms = 0;
+            upgradesBought = 0;
+            achievements = { ach1: false, ach2: false, ach3: false };
+            walletAddress = null;
+            lastDailyBonus = 0;
+            referralCode = null;
+            referralCount = 0;
+            leaderboardData = [
+                { name: "FarmerJoe", points: 150000 },
+                { name: "GreenThumb", points: 120000 },
+                { name: "CropKing", points: 100000 },
+                { name: "FieldStar", points: 80000 },
+                { name: "HarvestPro", points: 60000 }
+            ];
+            updateUI();
+            showNotification('Farm data reset successfully!');
+            document.querySelector('.modal')?.remove();
+        }
+        
+        // Initialize
+        updateUI();
+        showTab('tasks');
+    </script>
+    <title>Page Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <p>&lt;!DOCTYPE html&gt;</p>
+    <p>&lt;html lang=&quot;en&quot;&gt;</p>
+    <p>&lt;head&gt;</p>
+    <p>&nbsp; &nbsp; &lt;meta charset=&quot;UTF-8&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &lt;title&gt;$OKAPI ***** - ******* Adventure&lt;/title&gt;</p>
+    <p>&nbsp; &nbsp; &lt;**** rel=&quot;icon&quot; href=&quot;data:image/svg+xml,&lt;svg xmlns=&apos;<a data-fr-linked="true" href="http://www.w3.org/2000/svg">http://www.w3.org/2000/svg</a>&apos; viewBox=&apos;0 0 100 100&apos;&gt;&lt;path d=&apos;M50 20c-10 0-18 8-18 18s8 18 18 18 18-8 18-18-8-18-18-18zm0 30c-6.6 0-12-5.4-12-12s5.4-12 12-12 12 5.4 12 12-5.4 12-12 12z&apos; fill=&apos;%232a9d8f&apos;/&gt;&lt;**** d=&apos;M50 60v20h10V60H50z&apos; fill=&apos;%232a9d8f&apos;/&gt;&lt;/svg&gt;&quot; type=&quot;image/svg+xml&quot;&gt; &lt;!-- Wheat ******* --&gt;</p>
+    <p>&nbsp; &nbsp; &lt;link href=&quot;<a data-fr-linked="true" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400">https://fonts.googleapis.com/css2?family=Poppins:wght@400</a>;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &lt;link rel=&quot;stylesheet&quot; href=&quot;<a data-fr-linked="true" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css</a>&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &lt;style&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; :root {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --primary: #2a9d8f; /* ****** ***** */</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --secondary: #e9c46a; /* Harvest **** */</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --accent: #8b5e3c; /* Earthy Brown */</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --text: #ffffff;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --bg-dark: rgba(20, 33, 61, 0.95); /* **** Soil */</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --bronze: #cd7f32;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --silver: #d1d5db;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --gold: #f0c05a;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --shadow: rgba(0, 0, 0, 0.3);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; --gradient: linear-gradient(135deg, #2a9d8f, #8b5e3c);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; * {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin: 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; box-sizing: border-box;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-family: &apos;Poppins&apos;, -apple-system, BlinkMacSystemFont, sans-serif;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; body {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: url(&apos;<a data-fr-linked="true" href="https://images.unsplash.com/photo-1500595046743-ee65ed22d3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80">https://images.unsplash.com/photo-1500595046743-ee65ed22d3fb?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1350&amp;q=80</a>&apos;) no-repeat center/cover;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--text);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; min-height: 100vh;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; display: flex;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; flex-direction: column;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; align-items: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .container {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; max-width: 800px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; width: 100%;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin: 40px auto;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: var(--bg-dark);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 12px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 40px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; box-shadow: 0 **** 30px var(--shadow);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; backdrop-filter: blur(10px);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border: 1px solid rgba(255, 255, 255, 0.15);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .header {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; text-align: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-bottom: 40px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .header img.logo {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; width: 80px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-bottom: 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; h1 {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 2.5rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--secondary);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-weight: 600;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; letter-spacing: 2px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; text-transform: uppercase;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .stats {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; display: grid;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; gap: 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: rgba(255, 255, 255, 0.1);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-bottom: 40px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .stats p {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 1.1rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; text-align: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-weight: 500;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; display: flex;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; align-items: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; justify-content: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; gap: 8px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .stats i {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--accent);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 1.2rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .stats span {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--accent);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-weight: 600;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; #farm-button {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; display: flex;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; align-items: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; justify-content: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; gap: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; width: 100%;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; max-width: 300px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: var(--gradient);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--text);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border: none;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 1.5rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-weight: 600;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; text-transform: uppercase;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; cursor: pointer;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin: 30px auto;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; transition: ********** 0.3s ease, transform 0.2s ease;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; box-shadow: 0 5px 15px var(--shadow);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; #farm-button:hover {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: var(--secondary);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; transform: translateY(-2px);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; #farm-button:active {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; transform: translateY(0);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; #farm-button:disabled {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: #4b5563;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; cursor: not-allowed;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; #timer-display {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; text-align: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 1.2rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-top: 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--secondary);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .tab-menu {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; display: flex;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; gap: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-bottom: 30px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: rgba(255, 255, 255, 0.1);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .tab-menu button {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; flex: 1;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: transparent;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--text);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border: 1px solid rgba(255, 255, 255, 0.2);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 12px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 8px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 1rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-weight: 500;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; cursor: pointer;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; transition: all 0.3s ease;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .tab-menu button:hover {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: var(--accent);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: #fff;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .tab-menu button.active {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: var(--secondary);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: #000;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-color: var(--secondary);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .tab-content {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: rgba(255, 255, 255, 0.05);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 30px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; transition: opacity 0.3s ease;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .tab-content h2 {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 1.8rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--secondary);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-bottom: 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-weight: 600;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .task, .upgrade, .achievement, .daily-bonus, .referral, .reset-data {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: rgba(255, 255, 255, 0.1);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-bottom: 15px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 8px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border: 1px ***** rgba(255, 255, 255, 0.15);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .task button, .upgrade button, .achievement button, .daily-bonus button, .referral button, .reset-button {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: var(--gradient);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--text);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border: none;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 10px 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 8px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 1rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-weight: 500;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; cursor: pointer;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; transition: all 0.3s ease;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .task button:hover, .upgrade button:hover, .achievement button:hover, .daily-bonus button:hover, .referral button:hover, .reset-button:hover {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: var(--secondary);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: #000;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; transform: translateY(-2px);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .achievement.bronze { border-left: 5px solid var(--bronze); }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .achievement.silver { border-left: 5px solid var(--silver); }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .achievement.gold { border-left: 5px solid var(--gold); }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .leaderboard-list {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; max-height: 300px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; overflow-y: auto;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; scrollbar-width: thin;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .leaderboard-entry {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; display: flex;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; justify-content: space-between;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; align-items: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: rgba(255, 255, 255, 0.1);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 15px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-bottom: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 8px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; .notification {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; position: fixed;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; top: 20px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; left: 50%;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; transform: translateX(-50%);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: var(--gradient);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--text);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; padding: 12px 24px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; border-radius: 8px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 1rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-weight: 500;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; box-shadow: 0 5** 15px var(--shadow);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; display: none;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; z-index: 1000;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; transition: opacity 0.3s ease;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; footer {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; text-align: center;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-top: 40px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 0.9rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: rgba(255, 255, 255, 0.7);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; footer .copyright {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin-bottom: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; footer .rights-reserved {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 0.75rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; opacity: 0.8;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; footer .links a {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; color: var(--accent);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; text-decoration: none;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; margin: 0 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; font-size: 0.85rem;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; footer .links a:hover {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; text-decoration: underline;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; @media (max-width: 600px) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; .container { padding: 20px; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; h1 { font-size: 2rem; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #farm-button { font-size: 1.2rem; padding: 15px; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; .tab-menu button { font-size: 0.9rem; padding: 10px; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &lt;/style&gt;</p>
+    <p>&nbsp; &nbsp; &lt;script src=&quot;<a data-fr-linked="true" href="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js">https://cdn.ethers.io/lib/ethers-5.7.umd.min.js</a>&quot;&gt;&lt;/script&gt;</p>
+    <p>&nbsp; &nbsp; &lt;****** src=&quot;<a data-fr-linked="true" href="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js">https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js</a>&quot;&gt;&lt;/script&gt;</p>
+    <p>&lt;/head&gt;</p>
+    <p>&lt;body&gt;</p>
+    <p>&nbsp; &nbsp; &lt;div class=&quot;container&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;header&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;img src=&quot;<a data-fr-linked="true" href="https://via.placeholder.com/80?text=Wheat">https://via.placeholder.com/80?text=Wheat</a>&quot; alt=&quot;***** **** Logo&quot; class=&quot;logo&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;h1&gt;$***** TOKEN&lt;/h1&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;stats&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;&lt;i class=&quot;fas fa-seedling&quot;&gt;&lt;/i&gt; Tokens: &lt;span id=&quot;points&quot;&gt;0&lt;/span&gt;&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;&lt;i class=&quot;*** fa-level-up-alt&quot;&gt;&lt;/i&gt; Level: &lt;span id=&quot;level&quot;&gt;1&lt;/span&gt;&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;&lt;i class=&quot;fas fa-trophy&quot;&gt;&lt;/i&gt; **** Level: &lt;span id=&quot;level-progress&quot;&gt;0/200&lt;/span&gt;&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;button id=&quot;farm-button&quot;&gt;&lt;i class=&quot;fas fa-tractor&quot;&gt;&lt;/i&gt; Start Farming&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;div id=&quot;timer-display&quot;&gt;Time ***** harvest: Not started&lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;*** class=&quot;tab-menu&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button onclick=&quot;showTab(&apos;tasks&apos;)&quot; class=&quot;active&quot;&gt;Tasks&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button onclick=&quot;showTab(&apos;upgrades&apos;)&quot;&gt;Upgrades&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button onclick=&quot;showTab(&apos;achievements&apos;)&quot;&gt;Achievements&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button onclick=&quot;showTab(&apos;leaderboard&apos;)&quot;&gt;Rankings&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button onclick=&quot;showTab(&apos;wallet&apos;)&quot;&gt;Wallet&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;****** onclick=&quot;showTab(&apos;bonus&apos;)&quot;&gt;Bonus&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;*** id=&quot;tasks&quot; class=&quot;tab-content&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;h2&gt;Farm Tasks&lt;/h2&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;*** class=&quot;task&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;***** farming 50 times (Reward: *** tokens)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Progress: &lt;**** id=&quot;task1-progress&quot;&gt;0&lt;/span&gt;/50&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;****** id=&quot;task1-claim&quot; disabled&gt;***** Reward&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;task&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Start farming 100 ***** (Reward: 250 tokens)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Progress: &lt;span id=&quot;task2-progress&quot;&gt;0&lt;/span&gt;/100&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button id=&quot;task2-claim&quot; disabled&gt;Claim Reward&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;task&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;****** @OkapiToken on X (Reward: 2** tokens)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;****** id=&quot;task3-complete&quot; onclick=&quot;completeTask3()&quot;&gt;Follow&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;div id=&quot;upgrades&quot; class=&quot;tab-content&quot; style=&quot;display: none;&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;h2&gt;Farm Upgrades&lt;/h2&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;upgrade&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;***** ******* (2x tokens per harvest, Cost: 500 tokens)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;****** id=&quot;upgrade1-buy&quot; onclick=&quot;buyUpgrade(1)&quot;&gt;Buy&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;*** class=&quot;upgrade&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Auto-Harvester (Automatic ******* every 3 hours, Cost: 1000 tokens, ******** Level 30)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button id=&quot;upgrade2-buy&quot; onclick=&quot;buyUpgrade(2)&quot;&gt;Buy&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;*** id=&quot;achievements&quot; class=&quot;tab-content&quot; style=&quot;display: none;&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;h2&gt;Achievements&lt;/h2&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;achievement bronze&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Bronze Farmer: Start farming 100 ***** (Reward: 100 tokens)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Progress: &lt;**** id=&quot;ach1-progress&quot;&gt;0&lt;/span&gt;/100&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button id=&quot;ach1-claim&quot; disabled&gt;Claim Reward&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;achievement silver&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;****** Grower: Reach Level 5 (Reward: 200 tokens)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Progress: &lt;**** id=&quot;ach2-progress&quot;&gt;1&lt;/span&gt;/5&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;****** id=&quot;ach2-claim&quot; disabled&gt;Claim Reward&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;achievement gold&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Gold Harvester: Buy an ******* (Reward: 150 tokens)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Progress: &lt;span id=&quot;ach3-progress&quot;&gt;0&lt;/span&gt;/1&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button id=&quot;ach3-claim&quot; disabled&gt;Claim Reward&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;div id=&quot;leaderboard&quot; class=&quot;tab-content&quot; style=&quot;display: none;&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;h2&gt;Farmers&apos; Rankings&lt;/h2&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Your Rank: &lt;span id=&quot;player-rank&quot;&gt;N/A&lt;/span&gt; (League: &lt;span id=&quot;player-league&quot;&gt;Rookie&lt;/span&gt;)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;*** class=&quot;leaderboard-list&quot; id=&quot;leaderboard-list&quot;&gt;&lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;*** id=&quot;wallet&quot; class=&quot;tab-content&quot; style=&quot;display: none;&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;h2&gt;Wallet&lt;/h2&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Connect your Web3 wallet to receive $***** TOKENS ***** *** airdrop.&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button id=&quot;connect-wallet&quot; onclick=&quot;connectWallet()&quot;&gt;Connect Wallet&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p id=&quot;wallet-address&quot; style=&quot;word-break: break-all; display: none;&quot;&gt;Connected: &lt;**** id=&quot;wallet-public-key&quot;&gt;&lt;/span&gt;&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button id=&quot;disconnect-wallet&quot; onclick=&quot;disconnectWallet()&quot; style=&quot;display: none;&quot;&gt;********** Wallet&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;div id=&quot;bonus&quot; class=&quot;tab-content&quot; style=&quot;display: none;&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;h2&gt;Bonuses&lt;/h2&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;daily-bonus&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;***** Login Bonus (Reward: 50 tokens)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button id=&quot;daily-bonus-claim&quot; onclick=&quot;claimDailyBonus()&quot;&gt;Claim&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;referral&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Invite a Friend (Reward: 100 tokens per referral)&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Your Referral Link: &lt;span id=&quot;referral-code&quot;&gt;N/A&lt;/span&gt;&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button onclick=&quot;generateReferral()&quot;&gt;******** Link&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button id=&quot;share-referral&quot; onclick=&quot;shareReferral()&quot; style=&quot;display: none;&quot;&gt;Share Link&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;div class=&quot;reset-data&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Reset all farm **** to start fresh.&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button class=&quot;reset-button&quot; onclick=&quot;resetData()&quot;&gt;***** Data&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;div id=&quot;notification&quot; class=&quot;notification&quot;&gt;&lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &lt;/div&gt;</p>
+    <p>&nbsp; &nbsp; &lt;footer&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;p class=&quot;copyright&quot;&gt;&copy; 2025 OKAPI Token. &lt;span class=&quot;rights-reserved&quot;&gt;All rights reserved.&lt;/span&gt;&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;p class=&quot;links&quot;&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;a href=&quot;/terms&quot;&gt;Terms&lt;/a&gt; |</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;a href=&quot;/privacy&quot;&gt;Privacy&lt;/a&gt; |</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;a href=&quot;<a data-fr-linked="true" href="https://x.com/okapi">https://x.com/okapi</a>&quot;&gt;Follow ** ** X&lt;/a&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &lt;/footer&gt;</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &lt;script&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Initialize state</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let ****** = parseInt(localStorage.getItem(&apos;points&apos;)) || 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let ************ = parseInt(localStorage.getItem(&apos;farmingStart&apos;)) || 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let isFarming = localStorage.getItem(&apos;isFarming&apos;) === &apos;true&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; *** tapMultiplier = parseInt(localStorage.getItem(&apos;tapMultiplier&apos;)) || 1;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let autoHarvester = localStorage.getItem(&apos;autoHarvester&apos;) === &apos;true&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; *** autoHarvesterPurchased = localStorage.getItem(&apos;autoHarvesterPurchased&apos;) === &apos;true&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let turboTractorPurchased = localStorage.getItem(&apos;turboTractorPurchased&apos;) === &apos;true&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let task1Progress = parseInt(localStorage.getItem(&apos;task1Progress&apos;)) || 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let task1Completed = localStorage.getItem(&apos;task1Completed&apos;) === &apos;true&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let task2******** = parseInt(localStorage.getItem(&apos;task2Progress&apos;)) || 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let task2Completed = localStorage.getItem(&apos;task2Completed&apos;) === &apos;true&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let task3Completed = localStorage.getItem(&apos;task3Completed&apos;) === &apos;true&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let level = parseInt(localStorage.getItem(&apos;level&apos;)) || 1;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let totalFarms = parseInt(localStorage.getItem(&apos;totalFarms&apos;)) || 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; *** upgradesBought = parseInt(localStorage.getItem(&apos;upgradesBought&apos;)) || 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let achievements = JSON.parse(localStorage.getItem(&apos;achievements&apos;)) || { ach1: false, ach2: false, ach3: false };</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; *** ************* = localStorage.getItem(&apos;walletAddress&apos;) || null;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; *** lastDailyBonus = parseInt(localStorage.getItem(&apos;lastDailyBonus&apos;)) || 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; *** ************ = localStorage.getItem(&apos;referralCode&apos;) || null;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; let referralCount = parseInt(localStorage.getItem(&apos;referralCount&apos;)) || 0;</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // DOM elements</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const farmButton = document.getElementById(&apos;farm-button&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const pointsDisplay = document.getElementById(&apos;points&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const levelDisplay = document.getElementById(&apos;level&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const levelProgressDisplay = document.getElementById(&apos;level-progress&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const ************ = document.getElementById(&apos;timer-display&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const task1ProgressDisplay = document.getElementById(&apos;task1-progress&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const **************** = document.getElementById(&apos;task1-claim&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const task2ProgressDisplay = document.getElementById(&apos;task2-progress&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const task2ClaimButton = document.getElementById(&apos;task2-claim&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; ***** task3CompleteButton = document.getElementById(&apos;task3-complete&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const notification = document.getElementById(&apos;notification&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const ******************** = document.getElementById(&apos;wallet-address&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; ***** walletPublicKey = document.getElementById(&apos;wallet-public-key&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const ******************* = document.getElementById(&apos;connect-wallet&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const ********************** = document.getElementById(&apos;disconnect-wallet&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; ***** dailyBonusButton = document.getElementById(&apos;daily-bonus-claim&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; ***** referralCodeDisplay = document.getElementById(&apos;referral-code&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; ***** shareReferralButton = document.getElementById(&apos;share-referral&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const playerRankDisplay = document.getElementById(&apos;player-rank&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; ***** playerLeagueDisplay = document.getElementById(&apos;player-league&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const upgrade1BuyButton = document.getElementById(&apos;upgrade1-buy&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; ***** upgrade2BuyButton = document.getElementById(&apos;upgrade2-buy&apos;);</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // **** leaderboard data</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; *** *************** = JSON.parse(localStorage.getItem(&apos;leaderboardData&apos;)) || [</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;FarmerJoe&quot;, points: 150000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;GreenThumb&quot;, points: 120000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;CropKing&quot;, points: 100000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;FieldStar&quot;, points: 80000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;HarvestPro&quot;, points: 60000 }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; ];</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Leagues</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const leagues = [</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;Rookie&quot;, minPoints: 0 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;Bronze&quot;, minPoints: 5000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;Silver&quot;, minPoints: 20000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;Gold&quot;, minPoints: 50000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;Diamond&quot;, minPoints: 100000 }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; ];</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Level requirements</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function getPointsForLevel(lvl) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ****** 50 * lvl * lvl;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Get player&rsquo;s league</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function getPlayerLeague(points) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return leagues.reduce((prev, curr) =&gt; points &gt;= curr.********* ? curr.name : prev, leagues[0].name);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Update leaderboard</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function updateLeaderboard() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const *************** = document.getElementById(&apos;leaderboard-list&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; leaderboardList.innerHTML = &apos;&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const playerEntry = {&nbsp;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; name: walletAddress ? `You (${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)})` : &apos;You&apos;,&nbsp;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; points&nbsp;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; };</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; leaderboardData = leaderboardData.filter(entry =&gt; entry.**** !== playerEntry.name);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; leaderboardData.push(playerEntry);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; leaderboardData.sort((a, b) =&gt; b.points - a.points);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;leaderboardData&apos;, JSON.stringify(leaderboardData));</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const ********** = leaderboardData.findIndex(entry =&gt; entry.name === playerEntry.name) + 1;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; playerRankDisplay.textContent = playerRank &lt;= 10 ? `#${playerRank}` : &apos;N/A&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; playerLeagueDisplay.*********** = getPlayerLeague(points);</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; leaderboardData.slice(0, 10).forEach((entry, index) =&gt; {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ***** entryDiv = document.createElement(&apos;div&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; entryDiv.className = `leaderboard-entry ${entry.name === playerEntry.name ? &apos;current-player&apos; : &apos;&apos;}`;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; entryDiv.********* = `</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;span class=&quot;rank&quot;&gt;#${index + 1}&lt;/span&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;span class=&quot;player&quot;&gt;${entry.name}&lt;/span&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;span class=&quot;points&quot;&gt;${entry.points.toLocaleString()} tokens&lt;/span&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; `;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; leaderboardList.appendChild(entryDiv);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; });</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Format time</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function formatTime(seconds) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const h = Math.floor(seconds / 3600).toString().padStart(2, &apos;0&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, &apos;0&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const s = Math.floor(seconds % 60).toString().padStart(2, &apos;0&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return `${h}:${m}:${s}`;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Farming logic</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const FARM_DURATION = 3 * 60 * 60 * 1000; // 3 hours ** milliseconds</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; const BASE_****** = 3000; // **** ****** *** harvest</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function startFarming() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!isFarming) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; isFarming = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; farmingStart = Date.now();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; totalFarms++;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task1Progress = Math.min(task1Progress + 1, 50);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task2Progress = Math.min(task2Progress + 1, 100);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;isFarming&apos;, isFarming);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;farmingStart&apos;, farmingStart);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;totalFarms&apos;, totalFarms);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;task1Progress&apos;, task1Progress);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;task2Progress&apos;, task2Progress);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Farming started! Come back in 3 hours to collect rewards.&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;******* already ** progress!&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function checkFarming() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (isFarming &amp;&amp; farmingStart) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ***** elapsed = Date.now() - farmingStart;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (elapsed &gt;= FARM_DURATION) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const reward = BASE_REWARD * tapMultiplier;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; points += reward;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ********* = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; farmingStart = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;points&apos;, points);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;isFarming&apos;, isFarming);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;farmingStart&apos;, farmingStart);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(`Harvest complete! +${reward} tokens`);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (autoHarvester) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; setTimeout(startFarming, 1000); // Auto-restart farming</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Update timer display</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function updateTimer() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (isFarming &amp;&amp; farmingStart) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const elapsed = Date.now() - farmingStart;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const ********* = Math.max(0, (FARM_DURATION - elapsed) / 1000);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; timerDisplay.textContent = `Time until harvest: ${formatTime(remaining)}`;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; farmButton.disabled = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; farmButton.textContent = &apos;Farming...&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; timerDisplay.textContent = &apos;Time until harvest: *** started&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; farmButton.disabled = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; farmButton.textContent = &apos;Start Farming&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Check ******* status and update timer ***** second</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; setInterval(() =&gt; {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; checkFarming();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateTimer();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }, 1000);</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Check *** ******* rewards</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; if (isFarming &amp;&amp; farmingStart) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const ******* = Date.now() - farmingStart;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (elapsed &gt;= FARM_DURATION) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ***** reward = BASE_REWARD * tapMultiplier;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; points += reward;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; isFarming = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; farmingStart = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;points&apos;, points);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;isFarming&apos;, isFarming);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;farmingStart&apos;, farmingStart);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(`Offline harvest complete! +${reward} tokens`);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (autoHarvester) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; startFarming();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Update UI</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function updateUI() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; pointsDisplay.textContent = points.toLocaleString();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; levelDisplay.textContent = level;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ***** *************** = getPointsForLevel(level + 1);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; levelProgressDisplay.textContent = `${points.toLocaleString()}/${nextLevelPoints.toLocaleString()}`;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task1ProgressDisplay.textContent = task1Progress;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task1ClaimButton.disabled = task1Progress &lt; 50 || task1Completed;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task2ProgressDisplay.textContent = task2Progress;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task2ClaimButton.disabled = task2******** &lt; 100 || task2Completed;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task3CompleteButton.******** = task3Completed;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&apos;ach1-progress&apos;).*********** = totalFarms;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&apos;ach2-progress&apos;).textContent = level;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&apos;ach3-progress&apos;).textContent = upgradesBought;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&apos;ach1-claim&apos;).******** = ********** &lt; 100 || achievements.ach1;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&apos;ach2-claim&apos;).******** = ***** &lt; 5 || achievements.ach2;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&apos;ach3-claim&apos;).disabled = ************** &lt; 1 || achievements.ach3;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; referralCodeDisplay.*********** = referralCode ? `<a data-fr-linked="true" href="https://okapi.farm/ref/$">https://okapi.farm/ref/$</a>{referralCode}` : &apos;N/A&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; shareReferralButton.style.******* = ************ ? &apos;inline-block&apos; : &apos;none&apos;;</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; upgrade1BuyButton.disabled = turboTractorPurchased || points &lt; 500;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; upgrade2BuyButton.disabled = autoHarvesterPurchased || points &lt; 1000 || level &lt; 30;</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (walletAddress) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; walletAddressDisplay.style.******* = &apos;block&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; walletPublicKey.*********** = walletAddress;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; connectWalletButton.style.******* = &apos;none&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; disconnectWalletButton.style.display = &apos;block&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; walletAddressDisplay.style.display = &apos;none&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; connectWalletButton.style.display = &apos;block&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; disconnectWalletButton.style.******* = &apos;none&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dailyBonusButton.disabled = Date.now() - lastDailyBonus &lt; 24 * 60 * 60 * 1000;</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; while (points &gt;= getPointsForLevel(level + 1)) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; level++;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ****** += 50;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(`Level Up! Reached Level ${level}! +50 tokens`);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;points&apos;, points);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;tapMultiplier&apos;, tapMultiplier);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;autoHarvester&apos;, autoHarvester);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;autoHarvesterPurchased&apos;, autoHarvesterPurchased);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;turboTractorPurchased&apos;, turboTractorPurchased);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;task1Progress&apos;, task1Progress);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;task1Completed&apos;, task1Completed);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;task2Progress&apos;, task2Progress);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;task2Completed&apos;, task2Completed);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;task3Completed&apos;, task3Completed);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;level&apos;, level);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;totalFarms&apos;, totalFarms);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;upgradesBought&apos;, upgradesBought);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;achievements&apos;, JSON.stringify(achievements));</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;walletAddress&apos;, walletAddress);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;lastDailyBonus&apos;, lastDailyBonus);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;referralCode&apos;, referralCode);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;referralCount&apos;, referralCount);</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateLeaderboard();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateTimer();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // ***** farming event</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; farmButton.addEventListener(&apos;click&apos;, startFarming);</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Show notification</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function showNotification(message) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; notification.textContent = message;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; notification.style.display = &apos;block&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; notification.style.******* = &apos;1&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; setTimeout(() =&gt; {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; notification.style.opacity = &apos;0&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; setTimeout(() =&gt; notification.style.display = &apos;none&apos;, 300);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }, 3000);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Tab navigation</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function showTab(tabId) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.querySelectorAll(&apos;.tab-content&apos;).forEach(tab =&gt; tab.style.******* = &apos;none&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const tabElement = document.getElementById(tabId);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ** (tabElement) tabElement.style.display = &apos;block&apos;;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.querySelectorAll(&apos;.tab-**** button&apos;).forEach(*** =&gt; btn.classList.remove(&apos;active&apos;));</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.querySelector(`.tab-menu button[onclick=&quot;showTab(&apos;${tabId}&apos;)&quot;]`)?.classList.add(&apos;active&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Tasks</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; task1ClaimButton.addEventListener(&apos;click&apos;, () =&gt; {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (task1Progress &gt;= 50 &amp;&amp; !task1Completed) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; points += 100;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task1Completed = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Task completed! +*** tokens&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; });</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; task2ClaimButton.addEventListener(&apos;click&apos;, () =&gt; {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (task2Progress &gt;= 100 &amp;&amp; !task2Completed) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; points += 250;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task2********* = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;**** completed! +250 tokens&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; });</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function completeTask3() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!task3Completed) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; window.open(&apos;<a data-fr-linked="true" href="https://x.com">https://x.com</a>&apos;, &apos;_blank&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ****** += 200;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task3Completed = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;**** completed! +200 tokens&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Task ******* completed!&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Upgrades</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function buyUpgrade(id) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (id === 1 &amp;&amp; points &gt;= 500 &amp;&amp; !turboTractorPurchased) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ****** -= 500;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; tapMultiplier = 2;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; turboTractorPurchased = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; upgradesBought++;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Turbo Tractor purchased! 2x ****** per harvest&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else if (id === 2 &amp;&amp; points &gt;= 1000 &amp;&amp; !autoHarvesterPurchased &amp;&amp; level &gt;= 30) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; points -= 1000;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; autoHarvester = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; autoHarvesterPurchased = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; upgradesBought++;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!isFarming) startFarming(); // ***** farming if not already</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Auto-********* purchased! ********* farming every 3 hours&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(id === 2 &amp;&amp; level &lt; 30 ? &apos;Requires Level 30!&apos; : &apos;*** ****** ****** or already purchased!&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Achievements</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&apos;ach1-claim&apos;).addEventListener(&apos;click&apos;, () =&gt; {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (totalFarms &gt;= 100 &amp;&amp; !achievements.ach1) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ****** += 100;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; achievements.ach1 = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Achievement completed! +100 tokens&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; });</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&apos;ach2-claim&apos;).addEventListener(&apos;click&apos;, () =&gt; {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (level &gt;= 5 &amp;&amp; !achievements.ach2) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ****** += 200;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; achievements.ach2 = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;*********** completed! +200 tokens&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; });</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; document.getElementById(&apos;ach3-claim&apos;).addEventListener(&apos;click&apos;, () =&gt; {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (upgradesBought &gt;= 1 &amp;&amp; !achievements.ach3) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; points += 150;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; achievements.ach3 = true;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Achievement completed! +150 tokens&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; });</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Wallet Integration</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; *** provider;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; async function connectWallet() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; try {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (typeof window.ethereum !== &apos;undefined&apos;) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; provider = new ethers.providers.Web3Provider(window.ethereum);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; await window.ethereum.request({ method: &apos;eth_requestAccounts&apos; });</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;****** ******* YOUR_INFURA_ID with a valid Infura ID ** *** code ** install MetaMask.&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const signer = provider.getSigner();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; walletAddress = await signer.getAddress();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;walletAddress&apos;, walletAddress);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(`Wallet connected: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } catch (error) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(`Failed to connect wallet: ${error.message}`);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function disconnectWallet() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; walletAddress = null;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ******** = null;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.removeItem(&apos;walletAddress&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;****** disconnected.&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Daily Bonus</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function claimDailyBonus() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const now = Date.now();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (now - lastDailyBonus &gt;= 24 * 60 * 60 * 1000) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; points += 50;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; lastDailyBonus = now;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Daily bonus claimed! +50 tokens&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } else {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;**** back ******** for your next bonus!&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Referral System</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function generateReferral() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!walletAddress) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Connect your wallet to generate a ******** link!&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; referralCode = `${walletAddress.slice(2, 10).toUpperCase()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.setItem(&apos;referralCode&apos;, referralCode);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(`******** link generated: <a data-fr-linked="true" href="https://okapi.farm/ref/$">https://okapi.farm/ref/$</a>{referralCode}`);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; async function shareReferral() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const shareData = {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; title: &apos;**** OKAPI Token Farming!&apos;,</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; text: &apos;Grow your farm and earn $***** tokens! Join now using ** referral link!&apos;,</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; url: `<a data-fr-linked="true" href="https://okapi.farm/ref/$">https://okapi.farm/ref/$</a>{referralCode}`</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; };</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; try {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ***** navigator.share(shareData);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ****** += 10;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; referralCount++;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (************* % 5 === 0) points += 100;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Referral **** shared! +10 tokens&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; } catch (error) {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;****** to share ******** link.&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Reset data</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function resetData() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; const modal = document.createElement(&apos;div&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; modal.style.cssText = `</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; background: var(--bg-dark); padding: 20px; border-radius: 10px;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; box-shadow: 0 5** 15px var(--shadow); z-index: 2000; color: var(--text);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; `;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; modal.********* = `</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;h3&gt;Confirm Reset&lt;/h3&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;p&gt;Are *** sure *** want to reset *** farm data? This cannot be undone.&lt;/p&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button onclick=&quot;confirmReset()&quot; style=&quot;background: var(--gradient); padding: 10px 20px; border-radius: 8px;&quot;&gt;Confirm&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;button onclick=&quot;this.parentElement.remove()&quot; style=&quot;background: #4b5563; padding: 10px 20px; border-radius: 8px; margin-left: 10px;&quot;&gt;Cancel&lt;/button&gt;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; `;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.body.appendChild(modal);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; function confirmReset() {</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; localStorage.clear();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; points = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; farmingStart = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ********* = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; tapMultiplier = 1;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; autoHarvester = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; autoHarvesterPurchased = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ********************* = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task1Progress = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ************** = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task2Progress = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task2********* = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; task3Completed = false;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ***** = 1;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; totalFarms = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; upgradesBought = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; achievements = { ach1: false, ach2: false, ach3: false };</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; walletAddress = null;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; lastDailyBonus = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; referralCode = null;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; referralCount = 0;</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; leaderboardData = [</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;FarmerJoe&quot;, points: 150000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;GreenThumb&quot;, points: 120000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;CropKing&quot;, points: 100000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;FieldStar&quot;, points: 80000 },</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; { name: &quot;HarvestPro&quot;, points: 60000 }</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ];</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; showNotification(&apos;Farm data reset successfully!&apos;);</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; document.querySelector(&apos;.modal&apos;)?.remove();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; }</p>
+    <p><br></p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; // Initialize</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; updateUI();</p>
+    <p>&nbsp; &nbsp; &nbsp; &nbsp; showTab(&apos;tasks&apos;);</p>
+    <p>&nbsp; &nbsp; &lt;/script&gt;</p>
+    <p>&lt;/body&gt;</p>
+    <p>&lt;/html&gt;&lt;!DOCTYPE html&gt;</p>
+    <p>&lt;**** lang=&quot;en&quot;&gt;</p>
+    <p>&lt;head&gt;</p>
+    <p>&lt;title&gt;Page Title&lt;/title&gt;</p>
+    <p>&lt;meta charset=&quot;UTF-8&quot;&gt;</p>
+    <p style="text-align: left;">&lt;**** name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;</p>
+    <p style="text-align: left;">&lt;style&gt;</p>
+    <p style="text-align: left;">body {</p>
+    <p style="text-align: left;">&nbsp; font-family: Arial, Helvetica, sans-serif;</p>
+    <p style="text-align: left;">}</p>
+    <p style="text-align: left;">&lt;/style&gt;</p>
+    <p style="text-align: left;">&lt;/head&gt;</p>
+    <p style="text-align: left;">&lt;body&gt;</p>
+    <p style="text-align: left;"><br></p>
+    <p style="text-align: left;">&lt;h1&gt;My Website&lt;/h1&gt;</p>
+    <p style="text-align: left;">&lt;p&gt;A ******* created by me.&lt;/p&gt;</p>
+    <p style="text-align: left;"><br></p>
+    <p style="text-align: left;">&lt;/body&gt;</p>
+    <p style="text-align: left;">&lt;/html&gt;</p>
+    <p style="text-align: left;"><br></p>
+
+<div style="color: red">Word to HTML trial - please <a href="https://wordtohtml.net/site/payment">Go PRO</a> to get whole HTML.</div>
+</body>
+
+</html>
